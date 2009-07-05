@@ -2,7 +2,7 @@ jQuery(document).ready(function() {
    	jQuery("#xencarousel1").jCarouselLite({
        	btnNext: ".next",
        	btnPrev: ".prev",
-		auto: 3000,
+		auto: 5000,
 		mouseWheel: "true",
 		speed: 600,
 		easing: "easeInSine",

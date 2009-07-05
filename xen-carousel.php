@@ -171,7 +171,6 @@ function xencarousel_output()
     	    </ul>
     	</div>
 	</div>
-
 <?php
 }
 

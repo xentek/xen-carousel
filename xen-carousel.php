@@ -160,16 +160,16 @@ function xencarousel_output()
 	$images = _get_carousel_images();
 ?>
 	<div id="xencarouselcontainer">
-    	<span class="prev">Previous</span>
-        <span class="next">Next</span>
-        <div id="xencarouseloverlay"></div>
     	<div id="xencarousel1" class="xencarousel" rel="xencarousel1">
             <ul>
     		<?php foreach($images as $image): ?>
-    	        <li><a href="<?php echo $image['link']; ?>" title="<?php echo $image['title']; ?>"><img src="<?php echo $image['src']; ?>" alt="<?php echo $image['title']; ?>" width="<?php echo $image['width']; ?>" height="<?php echo $image['height']; ?>" ></li>
+    	        <li><a href="<?php echo $image['link']; ?>" title="<?php echo $image['title']; ?>"><img src="<?php echo $image['src']; ?>" alt="<?php echo $image['title']; ?>" width="<?php echo $image['width']; ?>" height="<?php echo $image['height']; ?>" /></li>
     		<?php endforeach; ?>
     	    </ul>
     	</div>
+    	<span class="prev">Previous</span>
+        <span class="next">Next</span>
+        <div id="xencarouseloverlay"></div>
 	</div>
 <?php
 }

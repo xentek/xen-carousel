@@ -3,7 +3,7 @@
 	Plugin Name: XEN Carousel
 	Plugin URI: http://xentek.net/code/wordpress/plugins/xen-carousel/
 	Description: Easily create a carousel of images for display on your home page or anywhere on your site.
-	Version: 0.8
+	Version: 0.9
 	Author: Eric Marden
 	Author URI: http://www.xentek.net/
 */
@@ -67,7 +67,7 @@ function xencarousel_scripts()
 			array('name' => 'jquery-jcarousel-lite', 'path' => $urlpath.'/jcarousellite.js', 'deps' => array('jquery'), 'ver' => '1.0.1'),
 			array('name' => 'jquery-easing', 'path' => $urlpath.'/jquery.easing.js', 'deps' => array('jquery'), 'ver' => '1.1'),
 			array('name' => 'jquery-mousewheel', 'path' => $urlpath.'/jquery.mousewheel.js', 'deps' => array('jquery'), 'ver' => '1.1'),
-			array('name' => 'xencarousel', 'path' => $urlpath.'/xencarousel.js', 'deps' => array('jquery','jquery-easing','jquery-mousewheel','jquery-jcarousel-lite'), 'ver' => '0.8'),
+			array('name' => 'xencarousel', 'path' => $urlpath.'/xencarousel.js', 'deps' => array('jquery','jquery-easing','jquery-mousewheel','jquery-jcarousel-lite'), 'ver' => '0.9'),
 		 );
 
 		foreach($scripts as $script)
@@ -127,7 +127,7 @@ function xencarousel_post_box()
 function xencarousel_ajax_search()
 {
 	global $wpdb;
-	$sql = "SELECT post_title, id FROM $wpdb->posts WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%' AND post_title LIKE '".$_GET['q']."' AND post_name LIKE '".$_GET['q']."'";
+	$sql = "SELECT post_title, id FROM $wpdb->posts WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%' AND (post_title LIKE '".$_GET['q']."%' OR post_name LIKE '".$_GET['q']."%')";
 	$results = $wpdb->get_results($sql,ARRAY_A);
 	$images = '';
 	if (count($results) > 0) {
@@ -158,17 +158,19 @@ function xencarousel_ajax_image()
 function xencarousel_output()
 {
 	$images = _get_carousel_images();
-//	var_dump($images);
 ?>
 	<span class="prev">Previous</span>
-	<div id="xencarousel1" class="xencarousel" rel="xencarousel1">
-	<div id="xencarousel-title"><?php $image['title']; ?></div>
-	    <ul>
-		<?php foreach($images as $image): ?>
-	        <li><a href="<?php echo $image['link']; ?>" title="<?php echo $image['title']; ?>"><img src="<?php echo $image['src']; ?>" alt="<?php echo $image['title']; ?>" width="<?php echo $image['width']; ?>" height="<?php echo $image['height']; ?>" ></li>
-		<?php endforeach; ?>
-	    </ul>
-	<span class="next">Next</span>	
+    <span class="next">Next</span>
+    <div id="xencarouseloverlay"></div>
+	<div id="xencarouselcontainer">
+    	<div id="xencarousel1" class="xencarousel" rel="xencarousel1">
+            <ul>
+    		<?php foreach($images as $image): ?>
+    	        <li><a href="<?php echo $image['link']; ?>" title="<?php echo $image['title']; ?>"><img src="<?php echo $image['src']; ?>" alt="<?php echo $image['title']; ?>" width="<?php echo $image['width']; ?>" height="<?php echo $image['height']; ?>" ></li>
+    		<?php endforeach; ?>
+    	    </ul>
+    	</div>
+	</div>
 
 <?php
 }

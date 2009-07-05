@@ -1,9 +1,9 @@
 <?php
 /*
-	Plugin Name: xen carousel
+	Plugin Name: XEN Carousel
 	Plugin URI: http://xentek.net/code/wordpress/plugins/xen-carousel/
 	Description: Easily create a carousel of images for display on your home page or anywhere on your site.
-	Version: 0.7
+	Version: 0.8
 	Author: Eric Marden
 	Author URI: http://www.xentek.net/
 */
@@ -67,7 +67,7 @@ function xencarousel_scripts()
 			array('name' => 'jquery-jcarousel-lite', 'path' => $urlpath.'/jcarousellite.js', 'deps' => array('jquery'), 'ver' => '1.0.1'),
 			array('name' => 'jquery-easing', 'path' => $urlpath.'/jquery.easing.js', 'deps' => array('jquery'), 'ver' => '1.1'),
 			array('name' => 'jquery-mousewheel', 'path' => $urlpath.'/jquery.mousewheel.js', 'deps' => array('jquery'), 'ver' => '1.1'),
-			array('name' => 'xencarousel', 'path' => $urlpath.'/xencarousel.js', 'deps' => array('jquery','jquery-easing','jquery-mousewheel','jquery-jcarousel-lite'), 'ver' => '0.7'),
+			array('name' => 'xencarousel', 'path' => $urlpath.'/xencarousel.js', 'deps' => array('jquery','jquery-easing','jquery-mousewheel','jquery-jcarousel-lite'), 'ver' => '0.8'),
 		 );
 
 		foreach($scripts as $script)
@@ -127,7 +127,7 @@ function xencarousel_post_box()
 function xencarousel_ajax_search()
 {
 	global $wpdb;
-	$sql = "SELECT post_title, id FROM $wpdb->posts WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%' AND post_title LIKE '".$_GET['q']."%'";
+	$sql = "SELECT post_title, id FROM $wpdb->posts WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%' AND post_title LIKE '".$_GET['q']."' AND post_name LIKE '".$_GET['q']."'";
 	$results = $wpdb->get_results($sql,ARRAY_A);
 	$images = '';
 	if (count($results) > 0) {
@@ -158,6 +158,7 @@ function xencarousel_ajax_image()
 function xencarousel_output()
 {
 	$images = _get_carousel_images();
+//	var_dump($images);
 ?>
 	<span class="prev">Previous</span>
 	<div id="xencarousel1" class="xencarousel" rel="xencarousel1">
@@ -175,7 +176,7 @@ function xencarousel_output()
 
 function _xen_get_attachment_image($attachment_id)
 {
-    $image = wp_get_attachment_image_src($attachment_id,'large');
+    $image = wp_get_attachment_image_src($attachment_id,'full');
     return $image;
 }
 
@@ -235,12 +236,12 @@ function _get_carousel_images()
 	$carousel_posts = new WP_Query();
 	add_filter('posts_join', '_get_custom_field_posts_join');
 	add_filter('posts_groupby', '_get_custom_field_posts_group');
-	$carousel_posts->query('showposts=5'); //Uses same parameters as query_posts
+	$carousel_posts->query('showposts=5&post_type=any'); //Uses same parameters as query_posts
 	remove_filter('posts_join', '_get_custom_field_posts_join');
 	remove_filter('posts_groupby', '_get_custom_field_posts_group');	
 	
 	while ($carousel_posts->have_posts()) : $carousel_posts->the_post();
-		$attachment_id = get_post_meta($post->ID, '_xencarousel_image', true);		
+		$attachment_id = get_post_meta($carousel_posts->post->ID, '_xencarousel_image_id', true);
 		$image = _xen_get_attachment_image($attachment_id);
 		$images[] = array("src" => $image[0], "width"=> $image[1], "height" => $image[2], "title" => the_title('','',false), "link" => get_permalink($post->ID) );
 	endwhile;
@@ -252,7 +253,7 @@ function _get_carousel_images()
 
 function _get_custom_field_posts_join($join) {
 	global $wpdb, $customFields;
-	return $join . "  JOIN $wpdb->postmeta postmeta ON (postmeta.post_id = $wpdb->posts.ID and postmeta.meta_key = '_xencarousel_image') ";
+	return $join . "  JOIN $wpdb->postmeta postmeta ON (postmeta.post_id = $wpdb->posts.ID and postmeta.meta_key = '_xencarousel_image_id') ";
 }
 
 function _get_custom_field_posts_group($group) {

@@ -3,7 +3,7 @@
 	Plugin Name: XEN Carousel
 	Plugin URI: http://xentek.net/code/wordpress/plugins/xen-carousel/
 	Description: Easily create a carousel of images for display on your home page or anywhere on your site.
-	Version: 0.9.3
+	Version: 0.9.4
 	Author: Eric Marden
 	Author URI: http://www.xentek.net/
 */
@@ -46,7 +46,8 @@ function xencarousel_admin_head()
 
 function xencarousel_admin_footer()
 {
-	echo '<script src="'.$urlpath.'/xencarousel-admin.js.php?ajaxpath='.urlencode($ajaxpath).'&path='.urlencode($urlpath).'&ver=0.9.3" type="text/javascript"></script>'."\n";
+    global $path, $ajaxpath, $urlpath;
+	echo '<script src="'.$urlpath.'/xencarousel-admin.js.php?ajaxpath='.urlencode($ajaxpath).'&path='.urlencode($urlpath).'&ver=0.9.4" type="text/javascript"></script>'."\n";
 }
 
 function xencarousel_admin_scripts()

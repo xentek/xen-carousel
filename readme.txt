@@ -73,7 +73,6 @@ The project is now hosted on [github.com](http://github.com/xentek/xen-carousel)
 * Fixed an issue with the use of the jQuery Easing plugin
 * Minified all js scripts.
 * Added a proper README.txt
-* 
 
 == License ==
 

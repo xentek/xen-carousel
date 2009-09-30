@@ -1,9 +1,9 @@
 <?php
 /*
-	Plugin Name: XEN Carousel
+	Plugin Name: xen carousel
 	Plugin URI: http://xentek.net/code/wordpress/plugins/xen-carousel/
 	Description: Easily create a carousel of images for display on your home page or anywhere on your site.
-	Version: 0.9.4
+	Version: 0.7
 	Author: Eric Marden
 	Author URI: http://www.xentek.net/
 */
@@ -29,7 +29,6 @@ $ajaxpath = get_bloginfo( 'wpurl' ).'/wp-admin/admin-ajax.php';
 $urlpath = WP_PLUGIN_URL.'/'.dirname(plugin_basename(__FILE__));
 
 add_action('admin_head','xencarousel_admin_head');
-add_action('admin_footer','xencarousel_admin_footer');
 add_action('admin_enqueue_scripts','xencarousel_admin_scripts');
 add_action('admin_menu', 'xencarousel_meta_box');
 add_action('wp_ajax_carousel_ajax_search','xencarousel_ajax_search');
@@ -42,12 +41,7 @@ function xencarousel_admin_head()
 	global $path, $ajaxpath, $urlpath;
 
 	echo '<link rel="stylesheet" href="'.$urlpath.'/jquery.autocomplete.css" type="text/css" media="screen" charset="utf-8" />'."\n";
-}
-
-function xencarousel_admin_footer()
-{
-    global $path, $ajaxpath, $urlpath;
-	echo '<script src="'.$urlpath.'/xencarousel-admin.js.php?ajaxpath='.urlencode($ajaxpath).'&path='.urlencode($urlpath).'&ver=0.9.4" type="text/javascript"></script>'."\n";
+	echo '<script src="'.$urlpath.'/xencarousel-admin.js.php?ajaxpath='.urlencode($ajaxpath).'&path='.urlencode($urlpath).'&ver=0.1" type="text/javascript"></script>'."\n";
 }
 
 function xencarousel_admin_scripts()
@@ -73,7 +67,7 @@ function xencarousel_scripts()
 			array('name' => 'jquery-jcarousel-lite', 'path' => $urlpath.'/jcarousellite.js', 'deps' => array('jquery'), 'ver' => '1.0.1'),
 			array('name' => 'jquery-easing', 'path' => $urlpath.'/jquery.easing.js', 'deps' => array('jquery'), 'ver' => '1.1'),
 			array('name' => 'jquery-mousewheel', 'path' => $urlpath.'/jquery.mousewheel.js', 'deps' => array('jquery'), 'ver' => '1.1'),
-			array('name' => 'xencarousel', 'path' => $urlpath.'/xencarousel.js', 'deps' => array('jquery','jquery-easing','jquery-mousewheel','jquery-jcarousel-lite'), 'ver' => '0.9.1'),
+			array('name' => 'xencarousel', 'path' => $urlpath.'/xencarousel.js', 'deps' => array('jquery','jquery-easing','jquery-mousewheel','jquery-jcarousel-lite'), 'ver' => '0.7'),
 		 );
 
 		foreach($scripts as $script)
@@ -133,7 +127,7 @@ function xencarousel_post_box()
 function xencarousel_ajax_search()
 {
 	global $wpdb;
-	$sql = "SELECT post_title, id FROM $wpdb->posts WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%' AND (post_title LIKE '".$_GET['q']."%' OR post_name LIKE '".$_GET['q']."%')";
+	$sql = "SELECT post_title, id FROM $wpdb->posts WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%' AND post_title LIKE '".$_GET['q']."%'";
 	$results = $wpdb->get_results($sql,ARRAY_A);
 	$images = '';
 	if (count($results) > 0) {
@@ -165,25 +159,23 @@ function xencarousel_output()
 {
 	$images = _get_carousel_images();
 ?>
-	<div id="xencarouselcontainer">
-    	<div id="xencarousel1" class="xencarousel" rel="xencarousel1">
-            <ul>
-    		<?php foreach($images as $image): ?>
-    	        <li><a href="<?php echo $image['link']; ?>" title="<?php echo $image['title']; ?>"><img src="<?php echo $image['src']; ?>" alt="<?php echo $image['title']; ?>" width="<?php echo $image['width']; ?>" height="<?php echo $image['height']; ?>" /></a></li>
-    		<?php endforeach; ?>
-    	    </ul>
-    	</div>
-    	<span class="prev">Previous</span>
-        <span class="next">Next</span>
-        <div id="xencarouseloverlay"></div>
-	</div>
+	<span class="prev">Previous</span>
+	<div id="xencarousel1" class="xencarousel" rel="xencarousel1">
+	<div id="xencarousel-title"><?php $image['title']; ?></div>
+	    <ul>
+		<?php foreach($images as $image): ?>
+	        <li><a href="<?php echo $image['link']; ?>" title="<?php echo $image['title']; ?>"><img src="<?php echo $image['src']; ?>" alt="<?php echo $image['title']; ?>" width="<?php echo $image['width']; ?>" height="<?php echo $image['height']; ?>" ></li>
+		<?php endforeach; ?>
+	    </ul>
+	<span class="next">Next</span>	
+
 <?php
 }
 
 
 function _xen_get_attachment_image($attachment_id)
 {
-    $image = wp_get_attachment_image_src($attachment_id,'full');
+    $image = wp_get_attachment_image_src($attachment_id,'large');
     return $image;
 }
 
@@ -243,12 +235,12 @@ function _get_carousel_images()
 	$carousel_posts = new WP_Query();
 	add_filter('posts_join', '_get_custom_field_posts_join');
 	add_filter('posts_groupby', '_get_custom_field_posts_group');
-	$carousel_posts->query('showposts=5&post_type=any'); //Uses same parameters as query_posts
+	$carousel_posts->query('showposts=5'); //Uses same parameters as query_posts
 	remove_filter('posts_join', '_get_custom_field_posts_join');
 	remove_filter('posts_groupby', '_get_custom_field_posts_group');	
 	
 	while ($carousel_posts->have_posts()) : $carousel_posts->the_post();
-		$attachment_id = get_post_meta($carousel_posts->post->ID, '_xencarousel_image_id', true);
+		$attachment_id = get_post_meta($post->ID, '_xencarousel_image', true);		
 		$image = _xen_get_attachment_image($attachment_id);
 		$images[] = array("src" => $image[0], "width"=> $image[1], "height" => $image[2], "title" => the_title('','',false), "link" => get_permalink($post->ID) );
 	endwhile;
@@ -260,7 +252,7 @@ function _get_carousel_images()
 
 function _get_custom_field_posts_join($join) {
 	global $wpdb, $customFields;
-	return $join . "  JOIN $wpdb->postmeta postmeta ON (postmeta.post_id = $wpdb->posts.ID and postmeta.meta_key = '_xencarousel_image_id') ";
+	return $join . "  JOIN $wpdb->postmeta postmeta ON (postmeta.post_id = $wpdb->posts.ID and postmeta.meta_key = '_xencarousel_image') ";
 }
 
 function _get_custom_field_posts_group($group) {

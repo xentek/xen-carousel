@@ -2,6 +2,39 @@
 	$ajaxpath = $_GET['ajaxpath'];
 	$path = $_GET['path'];
 ?>
+jQuery(document).ready(function() {
+
+	jQuery("#xencarouselimage").keypress(function() { 
+		jQuery("#xencarouselimage").css({"background":"url(<?php echo $path; ?>/ajax-loader.gif) no-repeat center right"});
+	});
+
+	jQuery("#xencarouselimage").bind("select blur",function() { 
+		jQuery("#xencarouselimage").css({"background":"none"});
+	});
+
+	jQuery("#xencarouselimage").autocomplete("<?php echo $ajaxpath; ?>",{ 
+		extraParams: { action: "carousel_ajax_search" }
+	}).result(function(evt, data, formatted) {
+		jQuery("#xencarouselimageid").val(data[1]);
+
+        jQuery.ajax({
+            url: "<?php echo $ajaxpath; ?>",
+            data: "xencarousel_image_id="+data[1]+"&action=carousel_ajax_image",
+            success: changeimg
+        });
+		
+	});
+		
+});
+
+function changeimg(d,s)
+{
+
+	var obj = eval( "(" + d + ")" );
+		jQuery("#xencarousel_thumb").css("background","url("+urldecode(obj.img)+") no-repeat");
+		jQuery("#xencarousel_thumb").css("width",obj.h+"px");
+		jQuery("#xencarousel_thumb").css("height",obj.w+"px");
+}
 
 function urldecode( str ) {
     // Decodes URL-encoded string  
@@ -91,37 +124,3 @@ function urldecode( str ) {
 
     return ret;
 }
-
-function changeimg(d,s)
-{
-
-	    var obj = eval( "(" + d + ")" );
-		jQuery("#xencarousel_thumb").css("background","url("+urldecode(obj.img)+") no-repeat");
-		jQuery("#xencarousel_thumb").css("width",obj.h+"px");
-		jQuery("#xencarousel_thumb").css("height",obj.w+"px");
-}
-
-jQuery(document).ready(function() {
-
-	jQuery("#xencarouselimage").keypress(function() { 
-		jQuery("#xencarouselimage").css({"background":"url(<?php echo $path; ?>/ajax-loader.gif) no-repeat center right"});
-	});
-
-	jQuery("#xencarouselimage").bind("select blur",function() { 
-		jQuery("#xencarouselimage").css({"background":"none"});
-	});
-
-	jQuery("#xencarouselimage").autocomplete("<?php echo $ajaxpath; ?>",{ 
-		extraParams: { action: "carousel_ajax_search" }
-	}).result(function(evt, data, formatted) {
-		jQuery("#xencarouselimageid").val(data[1]);
-
-        jQuery.ajax({
-            url: "<?php echo $ajaxpath; ?>",
-            data: "xencarousel_image_id="+data[1]+"&action=carousel_ajax_image",
-            success: changeimg
-        });
-		
-	});
-		
-});

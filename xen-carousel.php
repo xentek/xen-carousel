@@ -57,7 +57,7 @@ function xencarousel_admin_scripts()
 	if ( is_admin() )
 	{
 		$scripts = array( 
-			array('name' => 'autocomplete', 'path' => $urlpath.'/jquery.autocomplete.js', 'deps' => array('jquery'), 'ver'=>'1.0.2'),
+			array('name' => 'autocomplete', 'path' => $urlpath.'/jquery.autocomplete.min.js', 'deps' => array('jquery'), 'ver'=>'1.0.2'),
 		 );
 
 		foreach($scripts as $script)
@@ -71,10 +71,10 @@ function xencarousel_scripts()
 {
 	global $urlpath;
 		$scripts = array( 
-			array('name' => 'jquery-jcarousel-lite', 'path' => $urlpath.'/jcarousellite.js', 'deps' => array('jquery'), 'ver' => '1.0.1'),
-			array('name' => 'jquery-easing', 'path' => $urlpath.'/jquery.easing.js', 'deps' => array('jquery'), 'ver' => '1.1'),
-			array('name' => 'jquery-mousewheel', 'path' => $urlpath.'/jquery.mousewheel.js', 'deps' => array('jquery'), 'ver' => '1.1'),
-			array('name' => 'xencarousel', 'path' => $urlpath.'/xencarousel.js', 'deps' => array('jquery','jquery-easing','jquery-mousewheel','jquery-jcarousel-lite'), 'ver' => '0.9.1'),
+			array('name' => 'jquery-jcarousel-lite', 'path' => $urlpath.'/jcarousellite.min.js', 'deps' => array('jquery'), 'ver' => '1.0.1'),
+			array('name' => 'jquery-easing', 'path' => $urlpath.'/jquery.easing.min.js', 'deps' => array('jquery'), 'ver' => '1.1'),
+			array('name' => 'jquery-mousewheel', 'path' => $urlpath.'/jquery.mousewheel.min.js', 'deps' => array('jquery'), 'ver' => '1.1'),
+			array('name' => 'xencarousel', 'path' => $urlpath.'/xencarousel.min.js', 'deps' => array('jquery','jquery-easing','jquery-mousewheel','jquery-jcarousel-lite'), 'ver' => '0.9.1'),
 		 );
 
 		foreach($scripts as $script)

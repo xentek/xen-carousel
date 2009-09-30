@@ -2,12 +2,13 @@
 /*
 	Plugin Name: XEN Carousel
 	Plugin URI: http://xentek.net/code/wordpress/plugins/xen-carousel/
-	Description: Easily create a carousel of images for display on your home page or anywhere on your site.
-	Version: 0.9.4
+	Description: Easily create a carousel of images for display on your home page or anywhere else on your site.
+	Version: 0.10
 	Author: Eric Marden
 	Author URI: http://www.xentek.net/
 */
-/*  Copyright 2008  Eric Marden  (email : wp@xentek.net)
+/*  
+    Copyright 2008  Eric Marden  (email : wp@xentek.net)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

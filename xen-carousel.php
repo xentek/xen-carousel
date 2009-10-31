@@ -3,26 +3,26 @@
 	Plugin Name: XEN Carousel
 	Plugin URI: http://xentek.net/code/wordpress/plugins/xen-carousel/
 	Description: Easily create a carousel of images for display on your home page or anywhere else on your site.
-	Version: 0.10
+	Version: 0.12
 	Author: Eric Marden
 	Author URI: http://www.xentek.net/
 */
-/*  
-    Copyright 2008  Eric Marden  (email : wp@xentek.net)
+/*	
+	Copyright 2008	Eric Marden	 (email : wp@xentek.net)
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 $path = WP_PLUGIN_DIR.'/'.dirname(plugin_basename(__FILE__));
@@ -41,14 +41,13 @@ add_action('wp_enqueue_scripts','xencarousel_scripts');
 function xencarousel_admin_head()
 {
 	global $path, $ajaxpath, $urlpath;
-
 	echo '<link rel="stylesheet" href="'.$urlpath.'/jquery.autocomplete.css" type="text/css" media="screen" charset="utf-8" />'."\n";
 }
 
 function xencarousel_admin_footer()
 {
-    global $path, $ajaxpath, $urlpath;
-	echo '<script src="'.$urlpath.'/xencarousel-admin.js.php?ajaxpath='.urlencode($ajaxpath).'&path='.urlencode($urlpath).'&ver=0.9.4" type="text/javascript"></script>'."\n";
+	global $path, $ajaxpath, $urlpath;
+	echo '<script src="'.$urlpath.'/js/xencarousel-admin.js.php?ajaxpath='.urlencode($ajaxpath).'&path='.urlencode($urlpath).'&ver=0.9.4" type="text/javascript"></script>'."\n";
 }
 
 function xencarousel_admin_scripts()
@@ -57,7 +56,7 @@ function xencarousel_admin_scripts()
 	if ( is_admin() )
 	{
 		$scripts = array( 
-			array('name' => 'autocomplete', 'path' => $urlpath.'/jquery.autocomplete.min.js', 'deps' => array('jquery'), 'ver'=>'1.0.2'),
+			array('name' => 'autocomplete', 'path' => $urlpath.'/js/jquery.autocomplete.min.js', 'deps' => array('jquery'), 'ver'=>'1.0.2'),
 		 );
 
 		foreach($scripts as $script)
@@ -71,10 +70,10 @@ function xencarousel_scripts()
 {
 	global $urlpath;
 		$scripts = array( 
-			array('name' => 'jquery-jcarousel-lite', 'path' => $urlpath.'/jcarousellite.min.js', 'deps' => array('jquery'), 'ver' => '1.0.1'),
-			array('name' => 'jquery-easing', 'path' => $urlpath.'/jquery.easing.min.js', 'deps' => array('jquery'), 'ver' => '1.1'),
-			array('name' => 'jquery-mousewheel', 'path' => $urlpath.'/jquery.mousewheel.min.js', 'deps' => array('jquery'), 'ver' => '1.1'),
-			array('name' => 'xencarousel', 'path' => $urlpath.'/xencarousel.min.js', 'deps' => array('jquery','jquery-easing','jquery-mousewheel','jquery-jcarousel-lite'), 'ver' => '0.9.1'),
+			array('name' => 'jquery-jcarousel-lite', 'path' => $urlpath.'/js/jcarousellite.min.js', 'deps' => array('jquery'), 'ver' => '1.0.1'),
+			array('name' => 'jquery-easing', 'path' => $urlpath.'/js/jquery.easing.min.js', 'deps' => array('jquery'), 'ver' => '1.1'),
+			array('name' => 'jquery-mousewheel', 'path' => $urlpath.'/js/jquery.mousewheel.min.js', 'deps' => array('jquery'), 'ver' => '1.1'),
+			array('name' => 'xencarousel', 'path' => $urlpath.'/js/xencarousel.min.js', 'deps' => array('jquery','jquery-easing','jquery-mousewheel','jquery-jcarousel-lite'), 'ver' => '0.9.1'),
 		 );
 
 		foreach($scripts as $script)
@@ -94,30 +93,37 @@ function xencarousel_meta_box()
 
 function xencarousel_post_box()
 {
-	if ( isset($_GET['post']) ) {
+	if ( isset($_GET['post']) ):
 		$post = $_GET['post'];
-		
-		if ($attachment_id = get_post_meta($post, '_xencarousel_image_id', true)) {
-            $image = _xen_get_attachment_image($attachment_id);
-	    }
-	    
-	} else {
+	else:
 		$post = '-'.time();
+	endif;
+	
+	if ($attachment_id = get_post_meta($post, '_xencarousel_image_id', true)):
+		$image = _xen_get_attachment_image($attachment_id);
+	else:
 		$image = array("",'100','100');
-	}
+	endif;
 	
 	$src = $image[0];
-    $width = $image[1];
-    $height = $image[2];
+	$width = $image[1];
+	$height = $image[2];
 
 ?>
 <style>
 #xencarousel_thumb {
-    width: <?php echo $width; ?>px;
-    height: <?php echo $width; ?>px;
-    background: url(<?php echo $src; ?>) no-repeat;
+	width: <?php echo $width; ?>px;
+	height: <?php echo $height; ?>px;
+	background: url(<?php echo $src; ?>) no-repeat;
 	margin: auto;
-    border: 3px dotted #ebebeb;
+	border: 3px dotted #ebebeb;
+}
+
+#xendelete {
+	position: relative;
+	top: 0;
+	left: 0;
+	display: none;
 }
 </style>
 	<input type="hidden" name="xencarousel_nonce" id="xencarousel_nonce" value="<?php echo wp_create_nonce( plugin_basename(__FILE__) ); ?>" />
@@ -125,7 +131,7 @@ function xencarousel_post_box()
 	<label for="_xencarousel_image"><strong><?php __("Choose an image from the Media Library:", 'xencarousel' ); ?></strong></label>
 	<input type="text" name="_xencarousel_image" id="xencarouselimage" value="<?php echo get_post_meta($post, '_xencarousel_image', true); ?>" style="width: 500px" />
 	<p>Or <a id="add_image" class="thickbox" href="media-upload.php?post_id=<?php echo $post; ?>&amp;type=image&amp;TB_iframe=true&amp;width=640&amp;height=322">Upload a new image</a></p>
-	<div id="xencarousel_thumb"></div>
+	<div id="xencarousel_thumb"><img src="<?php echo $path; ?>/img/close_24.png" id="xendelete" title="Remove this slide from this post" alt="Delete Icon" /></div>
 	<br clear="both" />
 	
 <?php
@@ -133,31 +139,31 @@ function xencarousel_post_box()
 
 function xencarousel_ajax_search()
 {
-	global $wpdb;
-	$sql = "SELECT post_title, id FROM $wpdb->posts WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%' AND (post_title LIKE '".$_GET['q']."%' OR post_name LIKE '".$_GET['q']."%')";
+	global $wpdb, $firephp;
+	$sql = "SELECT post_title, post_name, id FROM $wpdb->posts WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%'";
 	$results = $wpdb->get_results($sql,ARRAY_A);
+	$matches = array_filter($results,'_search_string');
 	$images = '';
-	if (count($results) > 0) {
-		foreach ($results as $result)
-		{
-			$images .= $result['post_title'] . ' [id: '.$result['id'].']|'.$result['id']."\n";
-		}
-	} else {
+	if (count($matches) > 0):
+		foreach ($matches as $match):
+			$images .= $match['post_title'] . ' [id: '.$match['id'].']|'.$match['id']."\n";
+		endforeach;
+	else:
 		$images = 'No Results';
-	}
+	endif;
 	echo $images;
 	exit;
 }
 
 function xencarousel_ajax_image()
 {
-    $attachment_id = $_GET['xencarousel_image_id'];
-    $image = _xen_get_attachment_image($attachment_id);
-    $src = $image[0];
-    $width = $image[1];
-    $height = $image[2];
-    $img = array('img' => urlencode($src), 'w' => $width, 'h' => $height);
-    echo json_encode($img);
+	$attachment_id = $_GET['xencarousel_image_id'];
+	$image = _xen_get_attachment_image($attachment_id);
+	$src = $image[0];
+	$width = $image[1];
+	$height = $image[2];
+	$img = array('img' => urlencode($src), 'w' => $width, 'h' => $height);
+	echo json_encode($img);
 	exit;
 }
 
@@ -167,16 +173,16 @@ function xencarousel_output()
 	$images = _get_carousel_images();
 ?>
 	<div id="xencarouselcontainer">
-    	<div id="xencarousel1" class="xencarousel" rel="xencarousel1">
-            <ul>
-    		<?php foreach($images as $image): ?>
-    	        <li><a href="<?php echo $image['link']; ?>" title="<?php echo $image['title']; ?>"><img src="<?php echo $image['src']; ?>" alt="<?php echo $image['title']; ?>" width="<?php echo $image['width']; ?>" height="<?php echo $image['height']; ?>" /></a></li>
-    		<?php endforeach; ?>
-    	    </ul>
-    	</div>
-    	<span class="prev">Previous</span>
-        <span class="next">Next</span>
-        <div id="xencarouseloverlay"></div>
+		<div id="xencarousel1" class="xencarousel" rel="xencarousel1">
+			<ul>
+			<?php foreach($images as $image): ?>
+				<li><a href="<?php echo $image['link']; ?>" title="<?php echo $image['title']; ?>"><img src="<?php echo $image['src']; ?>" alt="<?php echo $image['title']; ?>" width="<?php echo $image['width']; ?>" height="<?php echo $image['height']; ?>" /></a></li>
+			<?php endforeach; ?>
+			</ul>
+		</div>
+		<span class="prev">Previous</span>
+		<span class="next">Next</span>
+		<div id="xencarouseloverlay"></div>
 	</div>
 <?php
 }
@@ -184,55 +190,55 @@ function xencarousel_output()
 
 function _xen_get_attachment_image($attachment_id)
 {
-    $image = wp_get_attachment_image_src($attachment_id,'full');
-    return $image;
+	$image = wp_get_attachment_image_src($attachment_id,'full');
+	return $image;
 }
 
 function _save_image_data( $post_id )
 {
 
-    global $post;
+	global $post;
 
-        if ( !wp_verify_nonce( $_POST['xencarousel_nonce'], plugin_basename(__FILE__) ) )
-        {  
-            return $post_id;  
-        }
+		if ( !wp_verify_nonce( $_POST['xencarousel_nonce'], plugin_basename(__FILE__) ) )
+		{  
+			return $post_id;  
+		}
 
-        if ( !current_user_can( 'edit_post', $post_id ) )
-        {          
-            return $post_id;  
-        }
+		if ( !current_user_can( 'edit_post', $post_id ) )
+		{		   
+			return $post_id;  
+		}
 
-        // $firephp->log("post id: ". $post_id);
-        
-        $_xencarousel_image_id = $_POST['_xencarousel_image_id'];
-        $_xencarousel_image = $_POST['_xencarousel_image'];
-        
-        if ( get_post_meta($post_id, '_xencarousel_image_id') == "" )
-        {
-            add_post_meta($post_id, '_xencarousel_image_id', $_xencarousel_image_id, true);                
-        }
-        elseif ($_xencarousel_image_id != get_post_meta($post_id, '_xencarousel_image_id', true) )  
-        {
-            update_post_meta($post_id, '_xencarousel_image_id', $_xencarousel_image_id);                
-        }
-        elseif($_xencarousel_image_id == "")
-        {
-            delete_post_meta($post_id, '_xencarousel_image_id', get_post_meta($post_id, '_xencarousel_image_id', true));                
-        }
+		// $firephp->log("post id: ". $post_id);
+		
+		$_xencarousel_image_id = $_POST['_xencarousel_image_id'];
+		$_xencarousel_image = $_POST['_xencarousel_image'];
+		
+		if ( get_post_meta($post_id, '_xencarousel_image_id') == "" )
+		{
+			add_post_meta($post_id, '_xencarousel_image_id', $_xencarousel_image_id, true);				   
+		}
+		elseif ($_xencarousel_image_id != get_post_meta($post_id, '_xencarousel_image_id', true) )	
+		{
+			update_post_meta($post_id, '_xencarousel_image_id', $_xencarousel_image_id);				
+		}
+		elseif($_xencarousel_image_id == "")
+		{
+			delete_post_meta($post_id, '_xencarousel_image_id', get_post_meta($post_id, '_xencarousel_image_id', true));				
+		}
 
-        if ( get_post_meta($post_id, '_xencarousel_image') == "" )
-        {
-            add_post_meta($post_id, '_xencarousel_image', $_xencarousel_image, true);                
-        }
-        elseif ($_xencarousel_image != get_post_meta($post_id, '_xencarousel_image', true) )  
-        {
-            update_post_meta($post_id, '_xencarousel_image', $_xencarousel_image);                
-        }
-        elseif($_xencarousel_image == "")
-        {
-            delete_post_meta($post_id, '_xencarousel_image', get_post_meta($post_id, '_xencarousel_image', true));                
-        }
+		if ( get_post_meta($post_id, '_xencarousel_image') == "" )
+		{
+			add_post_meta($post_id, '_xencarousel_image', $_xencarousel_image, true);				 
+		}
+		elseif ($_xencarousel_image != get_post_meta($post_id, '_xencarousel_image', true) )  
+		{
+			update_post_meta($post_id, '_xencarousel_image', $_xencarousel_image);				  
+		}
+		elseif($_xencarousel_image == "")
+		{
+			delete_post_meta($post_id, '_xencarousel_image', get_post_meta($post_id, '_xencarousel_image', true));				  
+		}
 
 
 }
@@ -257,18 +263,26 @@ function _get_carousel_images()
 	return $images;
 }
 
-
-
-function _get_custom_field_posts_join($join) {
+function _get_custom_field_posts_join($join)
+{
 	global $wpdb, $customFields;
 	return $join . "  JOIN $wpdb->postmeta postmeta ON (postmeta.post_id = $wpdb->posts.ID and postmeta.meta_key = '_xencarousel_image_id') ";
 }
 
-function _get_custom_field_posts_group($group) {
+function _get_custom_field_posts_group($group)
+{
 	global $wpdb;
 	$group .= " $wpdb->posts.ID ";
 	return $group;
 }
 
+function _search_string(&$value)
+{
+	if (stripos($value['post_name'], $_POST['q']) !== false || stripos($value['post_title'], $_POST['q']) !== false):
+		return true;
+	else:
+		return false;
+	endif;
+}
 
 ?>

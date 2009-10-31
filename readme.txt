@@ -1,6 +1,6 @@
 === XEN Carousel ===
 Contributors: xenlab
-Donate link: http://xentek.net/code/wordpress/plugins/xen-carousel/
+Donate link: http://j.mp/donate-to-xentek
 Tags: jcarousel,jcarousellite,carousel,slideshow,images,ajax,javascript,posts,pages,gallery
 Requires at least: 2.8
 Tested up to: 2.9
@@ -68,6 +68,14 @@ The project is now hosted on [github.com](http://github.com/xentek/xen-carousel)
 1. Example of a fully styled XEN Carousel in action. *Courtesy of AgileDevelopmentWithRob.com*
 
 == Changelog ==
+
+= 0.12 =
+* Added the ability to remove slides from Posts/Pages. Bug Report by [AM](http://xentek.net/code/wordpress/plugins/xen-carousel/#comment-3424)
+* Moved all external assets (js,css,img) to their own directories.
+* set the dataType to json in my ajax calls (eval is evil)
+
+= 0.11 =
+* Overhauled the search for images with array_filter, which VASTLY increases the **accuracy** of searches.
 
 = 0.10 =
 * Fixed an issue with the use of the jQuery Easing plugin

@@ -97,14 +97,18 @@ function changeimg(d,s)
 	jQuery("#xencarousel_thumb").css("background","url("+urldecode(d.img)+") no-repeat");
 	jQuery("#xencarousel_thumb").css("width",d.h+"px");
 	jQuery("#xencarousel_thumb").css("height",d.w+"px");
-	
+	bindxendelete();
+}
+
+function bindxendelete()
+{
 	jQuery("#xencarousel_thumb").hover(function() {
 		jQuery("#xendelete").show();
 	},function() {
 		jQuery("#xendelete").hide();
 	});
-	
 }
+
 
 jQuery(document).ready(function($) {
 
@@ -115,6 +119,9 @@ jQuery(document).ready(function($) {
 	$("#xencarouselimage").bind("select blur",function() { 
 		$("#xencarouselimage").css({"background":"none"});
 	});
+	if ( $("#xencarouselimage").val() != "" ) {
+		bindxendelete();
+	}
 	
 	$("#xendelete").click(function() {
 		$("#xencarousel_thumb").css("background","none");

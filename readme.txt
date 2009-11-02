@@ -69,6 +69,14 @@ The project is now hosted on [github.com](http://github.com/xentek/xen-carousel)
 
 == Changelog ==
 
+= 0.12.2 = 
+* Fixed an error due to using an undefined variable
+
+= 0.12.1 =
+* Re-tested 0.12 and found that I had to fix a number of paths.
+* Fixed a bug where the delete button wouldn't show if you edited a post/page that already had a slide associated with it. Now we're binding the event at all of the right interaction points.
+* Cleaned up the code and reduced the overall number of lines.
+
 = 0.12 =
 * Added the ability to remove slides from Posts/Pages. Bug Report by [AM](http://xentek.net/code/wordpress/plugins/xen-carousel/#comment-3424)
 * Moved all external assets (js,css,img) to their own directories.
